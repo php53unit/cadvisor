@@ -30,7 +30,7 @@ import (
 
 	auth "github.com/abbot/go-http-auth"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
+//	"github.com/prometheus/client_golang/prometheus/collectors"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"k8s.io/klog/v2"
@@ -98,9 +98,9 @@ func RegisterHandlers(mux httpmux.Mux, containerManager manager.Manager, httpAut
 // the provided HTTP mux to handle the given Prometheus endpoint.
 func RegisterPrometheusHandler(mux httpmux.Mux, resourceManager manager.Manager, prometheusEndpoint string,
 	f metrics.ContainerLabelsFunc, includedMetrics container.MetricSet) {
-	goCollector := collectors.NewGoCollector()
-	processCollector := collectors.NewProcessCollector(collectors.ProcessCollectorOpts{})
-	machineCollector := metrics.NewPrometheusMachineCollector(resourceManager, includedMetrics)
+	//goCollector := collectors.NewGoCollector()
+	//processCollector := collectors.NewProcessCollector(collectors.ProcessCollectorOpts{})
+	//machineCollector := metrics.NewPrometheusMachineCollector(resourceManager, includedMetrics)
 
 	mux.Handle(prometheusEndpoint, http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		opts, err := api.GetRequestOptions(req)
@@ -114,9 +114,9 @@ func RegisterPrometheusHandler(mux httpmux.Mux, resourceManager manager.Manager,
 		r := prometheus.NewRegistry()
 		r.MustRegister(
 			metrics.NewPrometheusCollector(resourceManager, f, includedMetrics, clock.RealClock{}, opts),
-			machineCollector,
-			goCollector,
-			processCollector,
+			//machineCollector,
+			//goCollector,
+			//processCollector,
 		)
 		promhttp.HandlerFor(r, promhttp.HandlerOpts{ErrorHandling: promhttp.ContinueOnError}).ServeHTTP(w, req)
 	}))
