@@ -100,7 +100,7 @@ func RegisterPrometheusHandler(mux httpmux.Mux, resourceManager manager.Manager,
 	f metrics.ContainerLabelsFunc, includedMetrics container.MetricSet) {
 	//goCollector := collectors.NewGoCollector()
 	//processCollector := collectors.NewProcessCollector(collectors.ProcessCollectorOpts{})
-	machineCollector := metrics.NewPrometheusMachineCollector(resourceManager, includedMetrics)
+	//machineCollector := metrics.NewPrometheusMachineCollector(resourceManager, includedMetrics)
 
 	mux.Handle(prometheusEndpoint, http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		opts, err := api.GetRequestOptions(req)
@@ -114,7 +114,7 @@ func RegisterPrometheusHandler(mux httpmux.Mux, resourceManager manager.Manager,
 		r := prometheus.NewRegistry()
 		r.MustRegister(
 			metrics.NewPrometheusCollector(resourceManager, f, includedMetrics, clock.RealClock{}, opts),
-			machineCollector,
+			//machineCollector,
 			//goCollector,
 			//processCollector,
 		)
